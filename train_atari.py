@@ -14,6 +14,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='DQN Atari')
     parser.add_argument('--load-checkpoint-file', type=str, default=None, 
                         help='Where checkpoint file should be loaded from (usually results/checkpoint.pth)')
+    parser.add_argument('--random-seed', type=str, default=42, 
+                        help='Where random seed should be inputted')
 
     args = parser.parse_args()
     # If you have a checkpoint file, spend less time exploring
@@ -23,7 +25,7 @@ if __name__ == '__main__':
         eps_start= 1
 
     hyper_params = {
-        "seed": 42,  # which seed to use
+        "seed": args.random_seed,  # which seed to use
         "env": "SpaceInvadersNoFrameskip-v0",  # name of the game
         "replay-buffer-size": int(5e3),  # replay buffer size
         "learning-rate": 1e-4,  # learning rate for Adam optimizer
