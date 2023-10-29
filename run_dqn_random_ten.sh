@@ -1,6 +1,6 @@
 # !/bin/bash
 
-for i in {1.10}
+for i in {1..10}
 do
     CURRENTEPOCTIME=`date +"%s"`
     mkdir seed${CURRENTEPOCTIME}
