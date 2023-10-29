@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     hyper_params = {
         "seed": 42,  # which seed to use
-        "env": "PongNoFrameskip-v4",  # name of the game
+        "env": "SpaceInvadersNoFrameskip-v0",  # name of the game
         "replay-buffer-size": int(5e3),  # replay buffer size
         "learning-rate": 1e-4,  # learning rate for Adam optimizer
         "discount-factor": 0.99,  # discount factor
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     env = ClipRewardEnv(env)
     env = FrameStack(env, 4)
     env = gym.wrappers.Monitor(
-        env, './video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
+        env, './SpaceInvadervideo/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
 
     replay_buffer = ReplayBuffer(hyper_params["replay-buffer-size"])
 
