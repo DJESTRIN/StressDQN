@@ -129,4 +129,4 @@ if __name__ == '__main__':
             print("********************************************************")
             torch.save(agent.policy_network.state_dict(), f'seed{hyper_params["seed"]}/checkpoint.pth')
             np.savetxt(f'seed{hyper_params["seed"]}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
-                       delimiter=',', fmt='%1.3f')
+                       delimiter=',', fmt='[%1.3f, %s]')
