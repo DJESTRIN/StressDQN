@@ -2,7 +2,11 @@
 
 for i in {1..10}
 do
+    source ~/.bashrc
+    conda activate StressDQN
+    module load cuda
+    nvidia-smi
     CURRENTEPOCTIME=`date +"%s"`
     mkdir seed${CURRENTEPOCTIME}
-    bash run_dqn.sh --random-seed ${CURRENTEPOCTIME} > seed${CURRENTEPOCTIME}/output.txt
+    python train_atari.py --random-seed ${CURRENTEPOCTIME} > seed${CURRENTEPOCTIME}/output.txt
 done

@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='DQN Atari')
     parser.add_argument('--load-checkpoint-file', type=str, default=None, 
                         help='Where checkpoint file should be loaded from (usually results/checkpoint.pth)')
-    parser.add_argument('--random-seed', type=str, default=42, 
+    parser.add_argument('--random-seed', type=int, default=42, 
                         help='Where random seed should be inputted')
 
     args = parser.parse_args()
