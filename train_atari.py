@@ -60,7 +60,7 @@ if __name__ == '__main__':
     env = ClipRewardEnv(env)
     env = FrameStack(env, 4)
     env = gym.wrappers.Monitor(
-        env, './SpaceInvadervideo/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
+        env, f'/seed{hyper_params["seed"]}/video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
 
     replay_buffer = ReplayBuffer(hyper_params["replay-buffer-size"])
 
@@ -127,6 +127,6 @@ if __name__ == '__main__':
             print("mean 100 episode reward: {}".format(mean_100ep_reward))
             print("% time spent exploring: {}".format(int(100 * eps_threshold)))
             print("********************************************************")
-            torch.save(agent.policy_network.state_dict(), f'checkpoint.pth')
-            np.savetxt('rewards_per_episode.csv', episode_rewards,
+            torch.save(agent.policy_network.state_dict(), f'seed{hyper_params["seed"]}/checkpoint.pth')
+            np.savetxt(f'seed{hyper_params["seed"]}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
                        delimiter=',', fmt='%1.3f')
