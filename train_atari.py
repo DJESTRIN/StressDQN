@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
     eps_timesteps = hyper_params["eps-fraction"] * \
         float(hyper_params["num-steps"])
-    episode_rewards = [0.0]
+    episode_rewards = [[0.0, None]]
 
     state = env.reset()
     for t in range(hyper_params["num-steps"]):
@@ -93,18 +93,20 @@ if __name__ == '__main__':
         if(sample > eps_threshold):
             # Exploit
             action = agent.act(state)
+            episode_rewards[-1][1] = "Exploit"
         else:
             # Explore
             action = env.action_space.sample()
+            episode_rewards[-1][1] = "Explore"
 
         next_state, reward, done, info = env.step(action)
         agent.memory.add(state, action, reward, next_state, float(done))
         state = next_state
 
-        episode_rewards[-1] += reward
+        episode_rewards[-1][0] += reward
         if done:
             state = env.reset()
-            episode_rewards.append(0.0)
+            episode_rewards.append([0.0, None])
 
         if t > hyper_params["learning-starts"] and t % hyper_params["learning-freq"] == 0:
             agent.optimise_td_loss()
@@ -116,7 +118,7 @@ if __name__ == '__main__':
 
         if done and hyper_params["print-freq"] is not None and len(episode_rewards) % hyper_params[
                 "print-freq"] == 0:
-            mean_100ep_reward = round(np.mean(episode_rewards[-101:-1]), 1)
+            mean_100ep_reward = round(np.mean([episode[0] for episode in episode_rewards[-101:-1]]), 1)
             print("********************************************************")
             print("steps: {}".format(t))
             print("episodes: {}".format(num_episodes))
