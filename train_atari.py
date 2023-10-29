@@ -60,7 +60,7 @@ if __name__ == '__main__':
     env = ClipRewardEnv(env)
     env = FrameStack(env, 4)
     env = gym.wrappers.Monitor(
-        env, f'/seed{hyper_params["seed"]}/video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
+        env, f'seed{hyper_params["seed"]}/video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
 
     replay_buffer = ReplayBuffer(hyper_params["replay-buffer-size"])
 
