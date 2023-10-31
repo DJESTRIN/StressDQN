@@ -88,10 +88,11 @@ if __name__ == '__main__':
 
     eps_timesteps = hyper_params["eps-fraction"] * \
         float(hyper_params["num-steps"])
-    episode_rewards = [[0.0, None]]
+    episode_rewards = [[0.0, 0, 0]] # The second number represents number of exploits, third number is total steps
 
     state = env.reset()
     for t in range(hyper_params["num-steps"]):
+        episode_rewards[-1][2] += 1
         fraction = min(1.0, float(t) / eps_timesteps)
         eps_threshold = hyper_params["eps-start"] + fraction * \
             (hyper_params["eps-end"] - hyper_params["eps-start"])
@@ -100,11 +101,10 @@ if __name__ == '__main__':
         if(sample > eps_threshold):
             # Exploit
             action = agent.act(state)
-            episode_rewards[-1][1] = "Exploit"
+            episode_rewards[-1][1] += 1
         else:
             # Explore
             action = env.action_space.sample()
-            episode_rewards[-1][1] = "Explore"
 
         next_state, reward, done, info = env.step(action)
         reward=(random.random()*40)-20
@@ -114,7 +114,7 @@ if __name__ == '__main__':
         episode_rewards[-1][0] += reward
         if done:
             state = env.reset()
-            episode_rewards.append([0.0, None])
+            episode_rewards.append([0, 0, 0])
 
         if t > hyper_params["learning-starts"] and t % hyper_params["learning-freq"] == 0:
             agent.optimise_td_loss()
@@ -135,4 +135,4 @@ if __name__ == '__main__':
             print("********************************************************")
             torch.save(agent.policy_network.state_dict(), f'../cohort1/junk_agents/junk_seed_{hyper_params["seed"]}/checkpoint.pth')
             np.savetxt(f'../cohort1/junk_agents/junk_seed_{hyper_params["seed"]}/rewards_per_episode_junk_seed_{hyper_params["seed"]}.csv', episode_rewards,
-                       delimiter=',', fmt='[%1.3f, %s]')
+                       delimiter=',', fmt='[%1.3f, %d, %d]')
