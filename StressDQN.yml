@@ -56,7 +56,7 @@ dependencies:
     - six==1.12.0
     - smdv==0.0.5
     - torch==1.13.1
-    - torchvision==0.4.0
+    - torchvision
     - typing-extensions==4.7.1
 prefix: /home/fs01/anp4047/anaconda3/envs/StressDQN
 
