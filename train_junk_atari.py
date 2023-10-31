@@ -9,6 +9,8 @@ from dqn.replay_buffer import ReplayBuffer
 from dqn.wrappers import *
 import torch
 import argparse
+import time
+import os
 
 if __name__ == '__main__':
 
@@ -48,6 +50,8 @@ if __name__ == '__main__':
     np.random.seed(hyper_params["seed"])
     random.seed(hyper_params["seed"])
 
+    os.mkdir(f'../cohort1/junk_agents/junk_seed_{hyper_params["seed"]}')
+
     assert "NoFrameskip" in hyper_params["env"], "Require environment with no frameskip"
     env = gym.make(hyper_params["env"])
     env.seed(hyper_params["seed"])
@@ -61,7 +65,7 @@ if __name__ == '__main__':
     env = ClipRewardEnv(env)
     env = FrameStack(env, 4)
     env = gym.wrappers.Monitor(
-        env, f'seed{hyper_params["seed"]}/video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
+        env, f'../cohort1/junk_agents/junk_seed_{hyper_params["seed"]}/video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
 
     replay_buffer = ReplayBuffer(hyper_params["replay-buffer-size"])
 
@@ -129,6 +133,6 @@ if __name__ == '__main__':
             print("mean 100 episode reward: {}".format(mean_100ep_reward))
             print("% time spent exploring: {}".format(int(100 * eps_threshold)))
             print("********************************************************")
-            torch.save(agent.policy_network.state_dict(), f'seed{hyper_params["seed"]}/checkpoint.pth')
-            np.savetxt(f'seed{hyper_params["seed"]}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
+            torch.save(agent.policy_network.state_dict(), f'../cohort1/junk_agents/junk_seed_{hyper_params["seed"]}/checkpoint.pth')
+            np.savetxt(f'../cohort1/junk_agents/junk_seed_{hyper_params["seed"]}/rewards_per_episode_junk_seed_{hyper_params["seed"]}.csv', episode_rewards,
                        delimiter=',', fmt='[%1.3f, %s]')
