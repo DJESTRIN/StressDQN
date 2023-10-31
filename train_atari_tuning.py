@@ -14,8 +14,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='DQN Atari')
     parser.add_argument('--load-checkpoint-file', type=str, default=None, 
                         help='Where checkpoint file should be loaded from (usually results/checkpoint.pth)')
-
+    
+    """hyper parameters for tuning """
+    parser.add_argument('--learning_rate', type=int, default=None)
+    parser.add_argument('--batch_size', type=int, default=None)
+    parser.add_argument('--output_dir', type=str, default=None)
     args = parser.parse_args()
+    
     # If you have a checkpoint file, spend less time exploring
     if(args.load_checkpoint_file):
         eps_start= 0.01
@@ -26,12 +31,12 @@ if __name__ == '__main__':
         "seed": 42,  # which seed to use
         "env": "BattleZoneNoFrameskip-v0",  # name of the game
         "replay-buffer-size": int(5e3),  # replay buffer size
-        "learning-rate": 1e-4,  # learning rate for Adam optimizer
+        "learning-rate": args.learning_rate,  # learning rate for Adam optimizer
         "discount-factor": 0.99,  # discount factor
         "dqn_type":"neurips",
         # total number of steps to run the environment for
         "num-steps": int(1e6),
-        "batch-size": 32,  # number of transitions to optimize at the same time
+        "batch-size": args.batch_size,  # number of transitions to optimize at the same time
         "learning-starts": 10000,  # number of steps before learning starts
         "learning-freq": 1,  # number of iterations between every optimization step
         "use-double-dqn": True,  # use double deep Q-learning
@@ -124,5 +129,9 @@ if __name__ == '__main__':
             print("% time spent exploring: {}".format(int(100 * eps_threshold)))
             print("********************************************************")
             torch.save(agent.policy_network.state_dict(), f'checkpoint.pth')
-            np.savetxt('rewards_per_episode.csv', episode_rewards,
+            
+            file_end="rewards_per_episode_{}_{}.csv".format(args.learning_rate,args.batch_size)
+            save_file=args.output_dir+file_end
+            
+            np.savetxt(save_file, episode_rewards,
                        delimiter=',', fmt='%1.3f')
