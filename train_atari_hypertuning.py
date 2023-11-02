@@ -8,6 +8,7 @@ from dqn.replay_buffer import ReplayBuffer
 from dqn.wrappers import *
 import torch
 import argparse
+import time
 print('here2')
 if __name__ == '__main__':
 
@@ -15,6 +16,8 @@ if __name__ == '__main__':
     parser.add_argument('--load-checkpoint-file', type=str, default=None, 
                         help='Where checkpoint file should be loaded from (usually results/checkpoint.pth)')
     parser.add_argument('--random-seed', type=int, default=42, 
+                        help='Where random seed should be inputted')
+    parser.add_argument('--output_path', type=str, default=42, 
                         help='Where random seed should be inputted')
 
     args = parser.parse_args()
@@ -25,7 +28,7 @@ if __name__ == '__main__':
         eps_start= 1
 
     hyper_params = {
-        "seed": args.random_seed,  # which seed to use
+        "seed": args.random_seed+int(time.time()),  # which seed to use
         "env": "SpaceInvadersNoFrameskip-v0",  # name of the game
         "replay-buffer-size": int(5e3),  # replay buffer size
         "learning-rate": 1e-4,  # learning rate for Adam optimizer
