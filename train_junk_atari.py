@@ -107,8 +107,8 @@ if __name__ == '__main__':
             action = env.action_space.sample()
 
         next_state, reward, done, info = env.step(action)
-        reward=(random.random()*40)-20
-        agent.memory.add(state, action, reward, next_state, float(done))
+        randomReward=(random.random()*40)-20
+        agent.memory.add(state, action, randomReward, next_state, float(done))
         state = next_state
 
         episode_rewards[-1][0] += reward
