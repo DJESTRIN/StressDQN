@@ -18,6 +18,8 @@ if __name__ == '__main__':
                         help='Where random seed should be inputted')
     parser.add_argument('--output-dir', type=str, default="", 
                         help='Where random seed should be inputted')
+    parser.add_argument('-j', '--junk',
+                        action='store_true')
 
     args = parser.parse_args()
     # If you have a checkpoint file, spend less time exploring
@@ -107,7 +109,12 @@ if __name__ == '__main__':
             episode_rewards[-1][1] = "Explore"
 
         next_state, reward, done, info = env.step(action)
-        agent.memory.add(state, action, reward, next_state, float(done))
+
+        # If this is junk, we should use a random number instead of the reward
+        adjustedReward = reward
+        if args.junk:
+            adjustedReward = (random.random()*40)-20
+        agent.memory.add(state, action, adjustedReward, next_state, float(done))
         state = next_state
 
         episode_rewards[-1][0] += reward
