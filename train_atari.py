@@ -2,13 +2,11 @@
 import random
 import numpy as np
 import gym
-print('here1')
 from dqn.agent import DQNAgent
 from dqn.replay_buffer import ReplayBuffer
 from dqn.wrappers import *
 import torch
 import argparse
-print('here2')
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='DQN Atari')
