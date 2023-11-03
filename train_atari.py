@@ -7,12 +7,16 @@ from dqn.replay_buffer import ReplayBuffer
 from dqn.wrappers import *
 import torch
 import argparse
+import os
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='DQN Atari')
     parser.add_argument('--load-checkpoint-file', type=str, default=None, 
                         help='Where checkpoint file should be loaded from (usually results/checkpoint.pth)')
     parser.add_argument('--random-seed', type=int, default=42, 
+                        help='Where random seed should be inputted')
+    parser.add_argument('--output-dir', type=str, default="", 
                         help='Where random seed should be inputted')
 
     args = parser.parse_args()
@@ -49,6 +53,9 @@ if __name__ == '__main__':
     env = gym.make(hyper_params["env"])
     env.seed(hyper_params["seed"])
 
+    outputPath = f'{args.output_dir}/seed{hyper_params["seed"]}' # folder we place data in
+    os.mkdir(outputPath)
+
     env = NoopResetEnv(env, noop_max=30)
     env = MaxAndSkipEnv(env, skip=4)
     env = EpisodicLifeEnv(env)
@@ -58,7 +65,7 @@ if __name__ == '__main__':
     env = ClipRewardEnv(env)
     env = FrameStack(env, 4)
     env = gym.wrappers.Monitor(
-        env, f'seed{hyper_params["seed"]}/video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
+        env, f'{outputPath}/video/', video_callable=lambda episode_id: episode_id % 50 == 0, force=True)
 
     replay_buffer = ReplayBuffer(hyper_params["replay-buffer-size"])
 
@@ -125,6 +132,6 @@ if __name__ == '__main__':
             print("mean 100 episode reward: {}".format(mean_100ep_reward))
             print("% time spent exploring: {}".format(int(100 * eps_threshold)))
             print("********************************************************")
-            torch.save(agent.policy_network.state_dict(), f'seed{hyper_params["seed"]}/checkpoint.pth')
-            np.savetxt(f'seed{hyper_params["seed"]}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
+            torch.save(agent.policy_network.state_dict(), f'{outputPath}/checkpoint_seed_{hyper_params["seed"]}.pth')
+            np.savetxt(f'{outputPath}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
                        delimiter=',', fmt='[%1.3f, %s]')
