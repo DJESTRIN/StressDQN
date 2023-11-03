@@ -1,5 +1,5 @@
 #!/bin/bash
-$OUTPUTDIR=$1
+OUTPUTDIR=$1
 # Need to add this to train_atari.py
 # Run sbatch
 for i in {1..10}

@@ -2,8 +2,8 @@
 #hylp1=$1
 #hyp2=$2
 #
-$RANDOMSEED=$1
-$OUTPUTDIR=$2
+RANDOMSEED=$1
+OUTPUTDIR=$2
 #Activate correct conda environment
 #source ~/.bashrc
 conda activate StressDQN
