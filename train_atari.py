@@ -98,10 +98,10 @@ if __name__ == '__main__':
 
     eps_timesteps = hyper_params["eps-fraction"] * \
         float(hyper_params["num-steps"])
-    episode_rewards = [[0.0, 0, 0]] # The second number represents number of exploits, third number is total steps
 
     state = env.reset()
     learning = True
+    episode_rewards = [[0.0, 0, 0, env.env.game_difficulty, learning]] # The second number represents number of exploits, third number is total steps
     for t in range(hyper_params["num-steps"]):
         episode_rewards[-1][2] += 1
         fraction = min(1.0, float(t) / eps_timesteps)
@@ -142,7 +142,7 @@ if __name__ == '__main__':
                 if t > hyper_params["num-steps"] * proportions[1]:
                     learning = True
             state = env.reset()
-            episode_rewards.append([0.0, 0, 0])
+            episode_rewards.append([0.0, 0, 0, env.env.game_difficulty, learning])
 
         if learning:
             if t > hyper_params["learning-starts"] and t % hyper_params["learning-freq"] == 0:
@@ -164,4 +164,4 @@ if __name__ == '__main__':
             print("********************************************************")
             torch.save(agent.policy_network.state_dict(), f'{outputPath}/checkpoint_seed_{hyper_params["seed"]}.pth')
             np.savetxt(f'{outputPath}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
-                       delimiter=',', fmt='[%1.3f, %d, %d]')
+                       delimiter=',', fmt='[%1.3f, %d, %d, %d, %b]')
