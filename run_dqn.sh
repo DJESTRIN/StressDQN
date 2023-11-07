@@ -17,7 +17,7 @@ fi
 if [ -n "$OUTPUTDIR" ]; then
   OUTPUTDIR="--output-dir $OUTPUTDIR"
 fi
-
+source ~/.bashrc
 conda activate StressDQN
 module load cuda
 nvidia-smi
