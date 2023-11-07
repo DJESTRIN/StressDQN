@@ -22,6 +22,8 @@ if __name__ == '__main__':
                         action='store_true')
     parser.add_argument('-r', '--random-choice',
                         action='store_true')
+    parser.add_argument('-d', '--difficulty-test',
+                        action='store_true')
 
     args = parser.parse_args()
     # If you have a checkpoint file, spend less time exploring
@@ -56,6 +58,10 @@ if __name__ == '__main__':
     assert "NoFrameskip" in hyper_params["env"], "Require environment with no frameskip"
     env = gym.make(hyper_params["env"])
     env.seed(hyper_params["seed"])
+
+    difficulties = env.unwrapped.ale.getAvailableDifficulties()
+    difficulties = [difficulties[0], difficulties[-1]]
+    proportions = [0.5, 0.75] #Only need two, because the last one is until the end
 
     outputPath = f'{args.output_dir}/seed{hyper_params["seed"]}' # folder we place data in
     os.mkdir(outputPath)
@@ -95,6 +101,7 @@ if __name__ == '__main__':
     episode_rewards = [[0.0, 0, 0]] # The second number represents number of exploits, third number is total steps
 
     state = env.reset()
+    learning = True
     for t in range(hyper_params["num-steps"]):
         episode_rewards[-1][2] += 1
         fraction = min(1.0, float(t) / eps_timesteps)
@@ -118,19 +125,31 @@ if __name__ == '__main__':
         adjustedReward = reward
         if args.junk:
             adjustedReward = (random.random()*40)-20
-        agent.memory.add(state, action, adjustedReward, next_state, float(done))
+        if learning:
+            agent.memory.add(state, action, adjustedReward, next_state, float(done))
         state = next_state
 
         episode_rewards[-1][0] += reward
         if done:
+            if args.difficult_test:
+                # If the step is greater than 50% of total, change difficulty to hard
+                # Do not learn
+                if t > hyper_params["num-steps"] * proportions[0]:
+                    env.env.game_difficulty = difficulties[1]
+                    env.seed(hyper_params["seed"])
+                    learning = False
+                # If we are past the 75% point, start learning again
+                if t > hyper_params["num-steps"] * proportions[1]:
+                    learning = True
             state = env.reset()
             episode_rewards.append([0.0, 0, 0])
 
-        if t > hyper_params["learning-starts"] and t % hyper_params["learning-freq"] == 0:
-            agent.optimise_td_loss()
+        if learning:
+            if t > hyper_params["learning-starts"] and t % hyper_params["learning-freq"] == 0:
+                agent.optimise_td_loss()
 
-        if t > hyper_params["learning-starts"] and t % hyper_params["target-update-freq"] == 0:
-            agent.update_target_network()
+            if t > hyper_params["learning-starts"] and t % hyper_params["target-update-freq"] == 0:
+                agent.update_target_network()
 
         num_episodes = len(episode_rewards)
 
