@@ -20,6 +20,8 @@ if __name__ == '__main__':
                         help='Where random seed should be inputted')
     parser.add_argument('-j', '--junk',
                         action='store_true')
+    parser.add_argument('-r', '--random-choice',
+                        action='store_true')
 
     args = parser.parse_args()
     # If you have a checkpoint file, spend less time exploring
@@ -100,7 +102,9 @@ if __name__ == '__main__':
             (hyper_params["eps-end"] - hyper_params["eps-start"])
         sample = random.random()
 
-        if(sample > eps_threshold):
+        if args.random_choice:
+            action = env.action_space.sample()
+        elif(sample > eps_threshold):
             # Exploit
             action = agent.act(state)
             episode_rewards[-1][1] += 1
