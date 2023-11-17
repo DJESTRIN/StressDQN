@@ -131,7 +131,7 @@ if __name__ == '__main__':
 
         episode_rewards[-1][0] += reward
         if done:
-            if args.difficult_test:
+            if args.difficulty_test:
                 # If the step is greater than 50% of total, change difficulty to hard
                 # Do not learn
                 if t > hyper_params["num-steps"] * proportions[0]:
@@ -164,4 +164,4 @@ if __name__ == '__main__':
             print("********************************************************")
             torch.save(agent.policy_network.state_dict(), f'{outputPath}/checkpoint_seed_{hyper_params["seed"]}.pth')
             np.savetxt(f'{outputPath}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
-                       delimiter=',', fmt='[%1.3f, %d, %d, %d, %b]')
+                       delimiter=',', fmt='[%1.3f, %s, %s, %s, %s]')

@@ -6,9 +6,32 @@ for i in {1..10}
 do
     CURRENTEPOCTIME=`date +%s`
     RANDOMSEED=$(($CURRENTEPOCTIME + $i))
-    sbatch --job-name=DQN_test --mem=300G --partition=scu-gpu --gres=gpu:2 --mail-type=BEGIN,END,FAIL --mail-user=dje4001@med.cornell.edu,anp4047@med.cornell.edu --wrap="bash run_dqn.sh notJunk $RANDOMSEED $OUTPUTDIR"
+    sbatch --job-name=DQN_test --mem=100G --partition=scu-gpu --gres=gpu:1 --mail-type=BEGIN,END,FAIL --mail-user=dje4001@med.cornell.edu,anp4047@med.cornell.edu --wrap="bash run_dqn.sh NoJunk random_agent dif_test_on $RANDOMSEED $OUTPUTDIR"
 done
+
+for i in {1..10}
+do
+    CURRENTEPOCTIME=`date +%s`
+    RANDOMSEED=$(($CURRENTEPOCTIME + $i))
+    sbatch --job-name=DQN_test --mem=100G --partition=scu-gpu --gres=gpu:1 --mail-type=BEGIN,END,FAIL --mail-user=dje4001@med.cornell.edu,anp4047@med.cornell.edu --wrap="bash run_$
+done
+
+for i in {1..10}
+do
+    CURRENTEPOCTIME=`date +%s`
+    RANDOMSEED=$(($CURRENTEPOCTIME + $i))
+    sbatch --job-name=DQN_test --mem=100G --partition=scu-gpu --gres=gpu:1 --mail-type=BEGIN,END,FAIL --mail-user=dje4001@med.cornell.edu,anp4047@med.cornell.edu --wrap="bash run_$
+done
+
 
 sbatch --mem=5G --partition=scu-cpu --dependency=singleton --job-name=DQN_test --wrap="bash change_ownership.sh"
 
 exit
+
+
+
+
+# Settings for run_dqn.sh script
+# junk    -- will create junk agents
+# random_agent -- will create random agents
+# dif_test_on -- will create a difficulty test simulating stress
