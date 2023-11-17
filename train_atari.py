@@ -49,7 +49,7 @@ if __name__ == '__main__':
         "eps-start": eps_start,  # e-greedy start threshold
         "eps-end": 0.01,  # e-greedy end threshold
         "eps-fraction": 0.1,  # fraction of num-steps
-        "print-freq": 10
+        "print-freq": 10,
     }
 
     np.random.seed(hyper_params["seed"])
@@ -57,11 +57,16 @@ if __name__ == '__main__':
 
     assert "NoFrameskip" in hyper_params["env"], "Require environment with no frameskip"
     env = gym.make(hyper_params["env"])
-    env.seed(hyper_params["seed"])
+    
 
     difficulties = env.unwrapped.ale.getAvailableDifficulties()
     difficulties = [difficulties[0], difficulties[-1]]
     proportions = [0.5, 0.75] #Only need two, because the last one is until the end
+    
+    # Temporary difficulty change
+    env.env.game_difficulty = difficulties[1]
+    # 
+    env.seed(hyper_params["seed"])
 
     outputPath = f'{args.output_dir}/seed{hyper_params["seed"]}' # folder we place data in
     os.mkdir(outputPath)
