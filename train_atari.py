@@ -8,6 +8,9 @@ from dqn.wrappers import *
 import torch
 import argparse
 import os
+from Record import Record
+import ipdb
+
 
 if __name__ == '__main__':
 
@@ -69,7 +72,8 @@ if __name__ == '__main__':
     env.seed(hyper_params["seed"])
 
     outputPath = f'{args.output_dir}/seed{hyper_params["seed"]}' # folder we place data in
-    os.mkdir(outputPath)
+    if not os.path.exists(outputPath):
+        os.mkdir(outputPath)
 
     env = NoopResetEnv(env, noop_max=30)
     env = MaxAndSkipEnv(env, skip=4)
@@ -95,7 +99,10 @@ if __name__ == '__main__':
         device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
         dqn_type=hyper_params["dqn_type"]
     )
-
+    
+    # Set up recording
+    Recording_oh=Record(42,args.output_dir)
+    
     if(args.load_checkpoint_file):
         print(f"Loading a policy - { args.load_checkpoint_file } ")
         agent.policy_network.load_state_dict(
@@ -107,6 +114,7 @@ if __name__ == '__main__':
     state = env.reset()
     learning = True
     episode_rewards = [[0.0, 0, 0, env.env.game_difficulty, learning]] # The second number represents number of exploits, third number is total steps
+    episode_counter=0
     for t in range(hyper_params["num-steps"]):
         episode_rewards[-1][2] += 1
         fraction = min(1.0, float(t) / eps_timesteps)
@@ -136,6 +144,14 @@ if __name__ == '__main__':
 
         episode_rewards[-1][0] += reward
         if done:
+            Recording_oh.grab_w_n_b(agent,episode_counter)
+            episode_counter+=1
+            
+            """ For testing purposes only, please delete lines below """
+            if episode_counter==50:
+                Recording_oh.concat_w_n_b()
+                ipdb.set_trace()
+                
             if args.difficulty_test:
                 # If the step is greater than 50% of total, change difficulty to hard
                 # Do not learn

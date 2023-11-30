@@ -1,6 +1,7 @@
 from gym import spaces
 import torch.nn as nn
 import torch.nn.functional as F
+import ipdb
 
 # Class structure loosely inspired by https://towardsdatascience.com/beating-video-games-with-deep-q-networks-7f73320b9592
 class DQN(nn.Module):
@@ -42,4 +43,5 @@ class DQN(nn.Module):
 
     def forward(self, x):
         conv_out = self.conv(x).view(x.size()[0],-1)
+        print(x)
         return self.fc(conv_out)

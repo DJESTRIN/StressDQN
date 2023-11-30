@@ -1,7 +1,7 @@
 #!/bin/bash
-OUTPUTDIR=$1
-OUTPUTDIR2=$2
-OUTPUTDIR3=$3
+OUTPUTDIR=$1 #real
+OUTPUTDIR2=$2 #junk
+OUTPUTDIR3=$3 #random
 # Need to add this to train_atari.py
 # Run sbatch
 for i in {1..10}
