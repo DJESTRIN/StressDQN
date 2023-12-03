@@ -6,7 +6,7 @@
 import ipdb
 import numpy as np
 import os,glob
-
+import csv
 class Record():
     def __init__(self,seed,output_dir):
         self.seed=seed
@@ -57,10 +57,38 @@ class Record():
             output_name=folder+'/concat.npy'
             np.save(output_name,fmat)
 
-    def unroll_episode(self, agent, state):
-        """ Save neural activity and  """
-        a=1
+    def activation_hook(self, agent, input, output):
+        """ Save neural activity 
+        Parameters
+        ----------
+        inst : torch.nn.Module
+            The layer we want to attach the hook to.
+        inp : tuple of torch.Tensor
+            The input to the `forward` method.
+        out : torch.Tensor
+            The output of the `forward` method.
+        """
+        output_name=self.output_dir+'/'+'activations'+'.csv'
+        with open(output_name, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(output.tolist())
         
+
+    def add_activation_hook(self, agent):
+        # module is essentially the layer
+        layerList = []
+        for name, module in agent.named_modules():
+            module.register_forward_hook(self.activation_hook)
+            layerList.append(name)
+
+        output_name=self.output_dir+'/'+'activations'+'.csv'
+        
+        # Adding first row with layer names
+        # I chose w to reset the file
+        with open(output_name, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(layerList)
+            
     
     
     

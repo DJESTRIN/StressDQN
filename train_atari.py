@@ -102,6 +102,7 @@ if __name__ == '__main__':
     
     # Set up recording
     Recording_oh=Record(42,args.output_dir)
+    Recording_oh.add_activation_hook(agent.policy_network)
     
     if(args.load_checkpoint_file):
         print(f"Loading a policy - { args.load_checkpoint_file } ")
@@ -126,6 +127,7 @@ if __name__ == '__main__':
             action = env.action_space.sample()
         elif(sample > eps_threshold):
             # Exploit
+
             action = agent.act(state)
             episode_rewards[-1][1] += 1
         else:
