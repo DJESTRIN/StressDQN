@@ -27,6 +27,16 @@ if __name__ == '__main__':
                         action='store_true')
     parser.add_argument('-d', '--difficulty-test',
                         action='store_true')
+    
+    #Hyper parameters
+    parser.add_argument('--learning-rate', type=int, default=1e-4, 
+                        help='Input the learning rate')
+    parser.add_argument('--num-steps', type=int, default=1e6, 
+                        help='Total number of steps for training')
+    parser.add_argument('--learning-starts', type=int, default=10000, 
+                        help='Episode where learning starts')
+    parser.add_argument('--batch-size', type=int, default=10, 
+                        help='Batch sizes')
 
     args = parser.parse_args()
     # If you have a checkpoint file, spend less time exploring
@@ -39,13 +49,13 @@ if __name__ == '__main__':
         "seed": args.random_seed,  # which seed to use
         "env": "SpaceInvadersNoFrameskip-v0",  # name of the game
         "replay-buffer-size": int(5e3),  # replay buffer size
-        "learning-rate": 1e-4,  # learning rate for Adam optimizer
+        "learning-rate": args.learning_rate,  # learning rate for Adam optimizer
         "discount-factor": 0.99,  # discount factor
         "dqn_type":"neurips",
         # total number of steps to run the environment for
-        "num-steps": int(1e6),
-        "batch-size": 32,  # number of transitions to optimize at the same time
-        "learning-starts": 10000,  # number of steps before learning starts
+        "num-steps": args.num_steps,
+        "batch-size": args.batch_size,  # number of transitions to optimize at the same time
+        "learning-starts": args.learning_starts,  # number of steps before learning starts
         "learning-freq": 1,  # number of iterations between every optimization step
         "use-double-dqn": True,  # use double deep Q-learning
         "target-update-freq": 1000,  # number of iterations between every target network update
