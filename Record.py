@@ -72,6 +72,7 @@ class Record():
         with open(output_name, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(output.tolist())
+        print("This is working!")
         
 
     def add_activation_hook(self, agent):
@@ -80,6 +81,7 @@ class Record():
         for name, module in agent.named_modules():
             module.register_forward_hook(self.activation_hook)
             layerList.append(name)
+            print(f"The name is:{name} and the module is {module}")
 
         output_name=self.output_dir+'/'+'activations'+'.csv'
         
