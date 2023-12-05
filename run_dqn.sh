@@ -4,6 +4,8 @@ RANDOM_AGENT=$2
 DIF_TEST=$3
 RANDOMSEED=$4
 OUTPUTDIR=$5
+LR=$6
+BS=$7
 
 #Determine type of run
 if [ "$JUNK" == "junk" ]; then
@@ -33,4 +35,4 @@ source ~/.bashrc
 conda activate StressDQN
 module load cuda
 nvidia-smi
-python train_atari.py --random-seed $RANDOMSEED $OUTPUTDIR $JUNK $RANDOM_AGENT $DIF_TEST
+python train_atari.py --random-seed $RANDOMSEED $OUTPUTDIR $JUNK $RANDOM_AGENT $DIF_TEST --learning-rate $LR --batch-size $BS --num-steps 100000 --learning-starts 1000

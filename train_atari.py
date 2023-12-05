@@ -196,5 +196,5 @@ if __name__ == '__main__':
             print("% time spent exploring: {}".format(int(100 * eps_threshold)))
             print("********************************************************")
             torch.save(agent.policy_network.state_dict(), f'{outputPath}/checkpoint_seed_{hyper_params["seed"]}.pth')
-            np.savetxt(f'{outputPath}/rewards_per_episode_seed_{hyper_params["seed"]}.csv', episode_rewards,
+            np.savetxt(f'{outputPath}/rewards_per_episode_seed_{hyper_params["seed"]}_{hyper_params["learning-rate"]}_{hyper_params["batch-size"]}.csv', episode_rewards,
                        delimiter=',', fmt='[%1.3f, %s, %s, %s, %s]')
