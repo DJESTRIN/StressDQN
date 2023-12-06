@@ -8,8 +8,8 @@ from dqn.wrappers import *
 import torch
 import argparse
 import os
-from Record import Record
-import ipdb
+#from Record import Record
+#import ipdb
 
 
 if __name__ == '__main__':
@@ -29,7 +29,7 @@ if __name__ == '__main__':
                         action='store_true')
     
     #Hyper parameters
-    parser.add_argument('--learning-rate', type=int, default=1e-4, 
+    parser.add_argument('--learning-rate', type=float, default=1e-4, 
                         help='Input the learning rate')
     parser.add_argument('--num-steps', type=int, default=1e6, 
                         help='Total number of steps for training')
@@ -111,8 +111,8 @@ if __name__ == '__main__':
     )
     
     # Set up recording
-    Recording_oh=Record(42,args.output_dir)
-    Recording_oh.add_activation_hook(agent.policy_network)
+ #   Recording_oh=Record(42,args.output_dir)
+  #  Recording_oh.add_activation_hook(agent.policy_network)
     
     if(args.load_checkpoint_file):
         print(f"Loading a policy - { args.load_checkpoint_file } ")
@@ -156,13 +156,13 @@ if __name__ == '__main__':
 
         episode_rewards[-1][0] += reward
         if done:
-            Recording_oh.grab_w_n_b(agent,episode_counter)
+   #         Recording_oh.grab_w_n_b(agent,episode_counter)
             episode_counter+=1
             
             """ For testing purposes only, please delete lines below """
-            if episode_counter==50:
-                Recording_oh.concat_w_n_b()
-                ipdb.set_trace()
+      #      if episode_counter==50:
+     #           Recording_oh.concat_w_n_b()
+    #            ipdb.set_trace()
                 
             if args.difficulty_test:
                 # If the step is greater than 50% of total, change difficulty to hard

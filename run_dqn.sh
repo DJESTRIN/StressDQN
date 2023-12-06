@@ -32,7 +32,7 @@ fi
 
 #Execute python command
 source ~/.bashrc
-conda activate StressDQN
+conda activate ~/anaconda3/envs/StressDQN
 module load cuda
 nvidia-smi
 python train_atari.py --random-seed $RANDOMSEED $OUTPUTDIR $JUNK $RANDOM_AGENT $DIF_TEST --learning-rate $LR --batch-size $BS --num-steps 100000 --learning-starts 1000
