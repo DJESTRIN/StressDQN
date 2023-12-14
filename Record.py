@@ -94,8 +94,11 @@ class Record():
             writer = csv.writer(file)
             writer.writerow(layerList)
             
-    def recordObservation(self, observation):
-        Image.fromarray(observation).save(f'{self.output_dir}/Image{self.imageCounter}.png')
+    def recordObservation(self, observation, episode):
+        path = f'{self.output_dir}/Episode{episode}'
+        if not os.path.exists(path):
+            os.mkdir(path)
+        Image.fromarray(observation).save(f'{path}/Image{self.imageCounter}.png')
     
     
     

@@ -145,7 +145,7 @@ if __name__ == '__main__':
             action = env.action_space.sample()
 
         next_state, reward, done, info = env.step(action)
-        # Recording_oh.recordObservation(next_state)
+        # Recording_oh.recordObservation(next_state, episode_counter)
 
         # If this is junk, we should use a random number instead of the reward
         adjustedReward = reward
