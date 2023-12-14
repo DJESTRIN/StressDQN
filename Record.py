@@ -7,6 +7,7 @@ import ipdb
 import numpy as np
 import os,glob
 import csv
+from PIL import Image
 class Record():
     def __init__(self,seed,output_dir):
         self.seed=seed
@@ -21,6 +22,8 @@ class Record():
             os.remove(file)
             
         self.output_dir=output_dir
+
+        self.imageCounter = 0
         
     def grab_w_n_b(self,agent,episode):
         """ Saves weight and bias information for each agent as a npy file """
@@ -91,7 +94,8 @@ class Record():
             writer = csv.writer(file)
             writer.writerow(layerList)
             
-    
+    def recordObservation(self, observation):
+        Image.fromarray(observation).save(f'{self.output_dir}/Image{self.imageCounter}.png')
     
     
     
