@@ -8,6 +8,9 @@ import numpy as np
 import os,glob
 import csv
 from PIL import Image
+import pandas as pd
+from collections import defaultdict
+
 class Record():
     def __init__(self,seed,output_dir):
         self.seed=seed
@@ -100,7 +103,50 @@ class Record():
             os.mkdir(path)
         Image.fromarray(observation).save(f'{path}/Image{self.imageCounter}.png')
     
-    
+    def buildDF(self):
+        # Organizes each folder by its layer name
+        # This assumes that each folder is named by "layer_bias" or "layer_weight"
+        # We create a dictionary where key is the layer
+        # Each value is an array with two folder names, the first being the bias and second being weights
+        folderDict = defaultdict(list)
+        subfolders=glob.glob(self.output_dir+'/*')
+
+        for folder in subfolders:
+            split_string = folder.split('_')
+            if split_string[-1] in ['bias', 'weight']:
+                folderDict[tuple(folder.split('_')[:-1])].append(folder)
+        
+        df = pd.DataFrame()
+
+        for key, folders in folderDict.items():
+            biasFolder, weightFolder = folders
+            # Makes sure that the variables are correct
+            if 'weight' not in weightFolder:
+                weightFolder, biasFolder = biasFolder, weightFolder
+
+            data = np.load(weightFolder + '/concat.npy')
+            bias_data = np.load(biasFolder + '/concat.npy')
+
+            datashape = data.shape
+
+            next_layer_idx, neuron_idx, episode_idx = np.indices(datashape)
+
+            # reshaped_data = data.reshape(-1, datashape[2])
+            reshaped_bias_data = bias_data.reshape(-1)
+
+            dictionary = {
+                "Episode": episode_idx.flatten() + 1,
+                "Neuron id": neuron_idx.flatten() + 1,
+                "Next Layer Neuron": next_layer_idx.flatten() + 1,
+                "Layer": os.path.basename(''.join(key)),
+                # "Weight Value": reshaped_data.flatten(),
+                "Weight Value": data.flatten(),
+                "Bias Value": np.repeat(reshaped_bias_data, datashape[1])
+            }
+
+            df2 = pd.DataFrame(dictionary)
+            df = pd.concat([df, df2])
+        return df
     
 # To do --> 
     # Need weights at end of every episode for every neuron along with biases
