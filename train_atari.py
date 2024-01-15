@@ -47,11 +47,11 @@ if __name__ == '__main__':
 
     hyper_params = {
         "seed": args.random_seed,  # which seed to use
-        "env": "SpaceInvadersNoFrameskip-v0",  # name of the game
-        "replay-buffer-size": int(5e3),  # replay buffer size
+        "env": "ALE/Breakout-v5",  # name of the game
+        "replay-buffer-size": int(1e6),  # replay buffer size
         "learning-rate": args.learning_rate,  # learning rate for Adam optimizer
         "discount-factor": 0.99,  # discount factor
-        "dqn_type":"neurips",
+        "dqn_type":"nature",
         # total number of steps to run the environment for
         "num-steps": args.num_steps,
         "batch-size": args.batch_size,  # number of transitions to optimize at the same time
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     np.random.seed(hyper_params["seed"])
     random.seed(hyper_params["seed"])
 
-    assert "NoFrameskip" in hyper_params["env"], "Require environment with no frameskip"
+    #assert "NoFrameskip" in hyper_params["env"], "Require environment with no frameskip"
     env = gym.make(hyper_params["env"])
     
 

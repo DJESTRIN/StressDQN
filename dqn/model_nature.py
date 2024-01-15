@@ -36,9 +36,15 @@ class DQN(nn.Module):
         )
 
         self.fc = nn.Sequential(
-            nn.Linear(in_features=64*7*7 , out_features=512),
+            nn.Linear(in_features=64*7*7 , out_features=1568),
             nn.ReLU(),
-            nn.Linear(in_features=512, out_features=action_space.n)
+            nn.Linear(in_features=1568 , out_features=784),
+            nn.ReLU(),
+            nn.Linear(in_features=784, out_features=512),
+            nn.ReLU(),
+            nn.Linear(in_features=512 , out_features=256),
+            nn.ReLU(),
+            nn.Linear(in_features=256, out_features=action_space.n)
         )
 
     def forward(self, x):

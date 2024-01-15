@@ -7,6 +7,8 @@ OUTPUTDIR=$5
 LR=$6
 BS=$7
 
+echo $LR
+
 #Determine type of run
 if [ "$JUNK" == "junk" ]; then
   JUNK="--junk"
@@ -35,4 +37,5 @@ source ~/.bashrc
 conda activate ~/anaconda3/envs/StressDQN
 module load cuda
 nvidia-smi
+echo $LR
 python train_atari.py --random-seed $RANDOMSEED $OUTPUTDIR $JUNK $RANDOM_AGENT $DIF_TEST --learning-rate $LR --batch-size $BS --num-steps 100000 --learning-starts 1000
