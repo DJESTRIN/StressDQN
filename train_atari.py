@@ -111,8 +111,8 @@ if __name__ == '__main__':
     )
     
     # Set up recording
-   Recording_oh=Record(42,args.output_dir)
-   Recording_oh.add_activation_hook(agent.policy_network)
+    Recording_oh=Record(42,args.output_dir)
+    Recording_oh.add_activation_hook(agent.policy_network)
     
     if(args.load_checkpoint_file):
         print(f"Loading a policy - { args.load_checkpoint_file } ")
