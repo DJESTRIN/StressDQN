@@ -77,7 +77,7 @@ if __name__ == '__main__':
     proportions = [0.5, 0.75] #Only need two, because the last one is until the end
     
     # Temporary difficulty change
-    env.env.game_difficulty = difficulties[1]
+    #env.env.game_difficulty = difficulties[1]
     # 
     env.seed(hyper_params["seed"])
 
