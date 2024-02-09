@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     hyper_params = {
         "seed": args.random_seed,  # which seed to use
-        "env": "ALE/Breakout-v5",  # name of the game
+        "env": "SpaceInvadersNoFrameskip-v0",  # name of the game
         "replay-buffer-size": int(1e6),  # replay buffer size
         "learning-rate": args.learning_rate,  # learning rate for Adam optimizer
         "discount-factor": 0.99,  # discount factor
